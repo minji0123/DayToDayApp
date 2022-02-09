@@ -1,33 +1,53 @@
 <form class="todo-list" action="/todos/create" method="post">
     <div class="mb-3">
-        <label class="form-label">할일</label>
-        <input type="text" class="form-control" name="title">
+        <label class="form-label">할 일</label>
+        <input type="text" class="form-control" name="title" id="new-comment-title">
         <!-- name = DTO -->
     </div>
-<!--    <div class="mb-3">-->
-<!--        <label class="form-label">상세</label>-->
-<!--        <textarea class="form-control" cols="30" rows="3" name="content"></textarea>-->
-<!--        &lt;!&ndash; name = DTO &ndash;&gt;-->
-<!--    </div>-->
+
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button type="button" class="btn btn-outline-dark" id="comment-create-btn">확인</button>
     </div>
-    <input class="todo__state" type="hidden" value="false" name="completed" />
+    <input class="todo__state" type="hidden" value="false" name="completed" id="new-comment-completed"/>
 </form>
 
 <script>
 {
-    const commentBtn = document.querySelector("#comment-create-btn");
+const commentBtn = document.querySelector("#comment-create-btn");
 
-    commentBtn.addEventListener("click", () => {
-        // 새 할일 객체 생성
-        const comment = {
+commentBtn.addEventListener("click", () => {
+    // 새 할일 객체 생성
+    const comment = {
+        title: document.querySelector("#new-comment-title").value,
+        completed: document.querySelector("#new-comment-completed").value
+    };
+    // 할일 객체 출력
+    console.log(comment);
+
+    // fetch Talend API 요청을 JavaScript 로 보내준다.
+    const url = "/daytoday/create";
+    fetch(url, {
+        method: "post",
+        body: JSON.stringify(comment),
+        headers: {
+            "Content-Type": "application/json"  // body 에 실어서 보낸게 application/json 타입이다. (여기 안에는 json 이 들어있엉)
+        }
+    }).then(response => {
+        // http 응답 코드에 따른 메세지 출력
+        const msg = (response.ok)? "할 일이 등록되었습니다." : "할 일 등록 실패!";
+        alert(msg);
+
+        // 현재 페이지 새로고침
+        window.location.reload();
+
+    });// fetch
+
+}); //addEventListener
 
 
-        };
 
 
-    }); //addEventListener
+
 
 
 }
