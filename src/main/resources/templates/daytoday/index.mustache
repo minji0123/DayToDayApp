@@ -47,12 +47,14 @@
             <div class="todo__text">{{title}}</div>
         </label>
         </div>
-        <span class="col-1 index-todo-btn material-icons-outlined">
-            <a href="/daytoday/{{id}}/edit">edit</a></span>
-
+        <span class="col-1 index-todo-btn material-icons-outlined edit-btn" data-bs-toggle="modal"   data-bs-target="#edit-modal"
+              data-bs-id="{{id}}"
+              data-bs-title="{{title}}">
+            edit</span>
 
         <span class="col-1 index-todo-btn material-icons-outlined delete-btn" data-id="{{id}}">
             delete</span>
+
         <div class="col-1"></div>
         <hr />
     </div>
@@ -61,73 +63,89 @@
     {{>daytoday/_new}}
     <div style="margin-bottom: 5px;"></div>
 </div>
-<script>
 
-$("input:checkbox[value='true']").prop("checked",true); // 채크됨
-$("input:checkbox[value='false']").prop("checked",false); //체크안됨
+<!-- Modal (댓글 수정)-->
+<div class="modal fade" id="edit-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">댓글 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="todo-list">
 
-function checkbox_Checked(this_checkbox){
-    console.log(this_checkbox);
-    console.log($(this_checkbox));
+                <div class="mb-3">
+                    <label class="form-label">할일</label>
+                    <input type="text" class="form-control" name="title" id="edit-modal-title">
+                    <!-- name = DTO -->
+                </div>
 
-    const checked = $(this_checkbox).prop("checked");
-    const id = $(this_checkbox).prop("id");
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-outline-dark" id="edit-btn">확인</button>
+                </div>
 
-    console.log(checked);
-    console.log(id);
+<!--                {{#daytodayList}}-->
+                <input name="id" id="edit-modal-id" type="hidden"/>
+                <input class="todo__state" type="hidden" value="false" name="completed" id="edit-modal-completed"/>
+<!--                {{/daytodayList}}-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-    const checkbox_status = {  // Json 키 값 = Dto 키 값
-        "id" : id,
-        "completed" : checked
-    };
-    console.log(checkbox_status);
-
-    // fetch() - 수정 REST API 호출
-    const url = "/daytoday/update/" +checkbox_status.id;
-    fetch(url, {
-        method: "PATCH",                         // PATCH 요청을 보낼거다.
-        body: JSON.stringify(checkbox_status),          // comment JS 객체(수정된 댓글)을 JSON 으로 바꿔서 보낸다.
-        headers: {
-            "Content-Type": "application/json" // body 에 실어서 보낸게 application/json 타입이다. (여기 안에는 json 이 들어있엉)
-        }
-    }).then(response => {
-            // http 응답 코드에 따른 메세지 출력
-            const msg = (response.ok)? "체크박스가 수정되었습니다." : "체크박스 수정 실패!";
-
-     });
-
-}// function
-
-
-</script>
 
 <script>
 {
-    const deleteBtns = document.querySelectorAll(".delete-btn");
+    // 모달 창 변수화 (버튼 누르면 모달창 뜨게)
+    const editModal = document.querySelector('#edit-modal');
 
-    deleteBtns.forEach(btn => {
+    // 수정 버튼 클릭하면은
+    editModal.addEventListener("shown.bs.modal", (event) => {
+        // 트리거 버튼 변수화
+        const triggerBtn = event.relatedTarget;
 
-        // 각 버튼의 이벤트 처리 등록
-        btn.addEventListener("click", (event) => {
+        // 원래 있던 할 일 불러오기
+        const id = triggerBtn.getAttribute("data-bs-id");
+        const title = triggerBtn.getAttribute("data-bs-title");
+        const completed = triggerBtn.getAttribute("data-bs-completed");
 
-            const deleteBtn = event.srcElement; // 현재 클릭된 버튼
+        // 불러온 할 일 반영시키기
+        document.querySelector("#edit-modal-id").value = id;
+        document.querySelector("#edit-modal-title").value = title;
+        document.querySelector("#edit-modal-completed").value = completed;
+    });
+}
 
-            const dtdId = deleteBtn.getAttribute("data-id"); // 삭제할 할 일 id 가져오기
-            console.log(`삭제 버튼 클릭: ${id}번 할 일`);
 
-            const url = `/daytoday/delete/${dtdId}`;
-            fetch(url, {
-                method: "delete",
-            }).then(response => {
+{
+    // 수정 완료 버튼 변수화
+    const editedBtn = document.querySelector("#edit-btn");
 
-                if (!response.ok){
-                    alert("할 일 삭제 실패!");;
-                    return;
-                }
+    // 수정 완료 버튼 클릭하면은
+    editedBtn.addEventListener("click", () => {
+        // 수정 할일 객체 생성
+        const editDTD = {
+        id : document.querySelector("#edit-modal-id").value,
+        title : document.querySelector("#edit-modal-title").value,
+        completed : document.querySelector("#edit-modal-completed").value
+        };
 
-                const target = document.querySelector(`#${dtdId}`);
-                target.remove();
-            });
+
+        // fetch ㄱㄱ
+        const url = "";
+        fetch (url, {
+            method: "patch",
+            body:JSON.stringify(editDTD),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            const msg = (response.ok)? "댓글이 수정되었습니다." : "댓글 수정 실패!";
+
+            // 현재 페이지 새로고침침
+            window.location.reload();
         });
     });
 }

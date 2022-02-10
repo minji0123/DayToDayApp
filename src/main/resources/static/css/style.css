@@ -182,7 +182,9 @@ td{
 .index-todo-btn-edit {
     margin-left: 15px;
 }
-
+.delete-btn, .edit-btn{
+cursor: pointer;
+}
 
 .show-list{
   max-width: 35em;
