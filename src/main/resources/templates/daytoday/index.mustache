@@ -85,10 +85,10 @@
                     <button type="submit" class="btn btn-outline-dark" id="edit-btn">확인</button>
                 </div>
 
-<!--                {{#daytodayList}}-->
-                <input name="id" id="edit-modal-id" type="hidden"/>
-                <input class="todo__state" type="hidden" value="false" name="completed" id="edit-modal-completed"/>
-<!--                {{/daytodayList}}-->
+                {{#daytodayList}}
+                    <input name="id" id="edit-modal-id" type="hidden"/>
+                    <input class="todo__state" type="hidden" value="false" name="completed" id="edit-modal-completed"/>
+                {{/daytodayList}}
                 </form>
             </div>
         </div>
@@ -127,24 +127,23 @@
     editedBtn.addEventListener("click", () => {
         // 수정 할일 객체 생성
         const editDTD = {
-        id : document.querySelector("#edit-modal-id").value,
-        title : document.querySelector("#edit-modal-title").value,
-        completed : document.querySelector("#edit-modal-completed").value
+            id : document.querySelector("#edit-modal-id").value,
+            title : document.querySelector("#edit-modal-title").value,
+            completed : document.querySelector("#edit-modal-completed").value
         };
 
-
-        // fetch ㄱㄱ
-        const url = "";
+        // fetch
+        const url = "/daytoday/edit/"+ editDTD.id;
         fetch (url, {
-            method: "patch",
+            method: "PATCH",
             body:JSON.stringify(editDTD),
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(response => {
-            const msg = (response.ok)? "댓글이 수정되었습니다." : "댓글 수정 실패!";
+            const msg = (response.ok)? "할 일이 수정되었습니다." : "할 일 수정 실패!";
 
-            // 현재 페이지 새로고침침
+            // 현재 페이지 새로고침
             window.location.reload();
         });
     });

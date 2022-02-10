@@ -53,7 +53,7 @@ deleteBtns.forEach(btn => {
         }).then(response => {
 
             if (!response.ok){
-                alert("할 일 삭제 실패!");;
+                alert("할 일 삭제 실패!");
                 return;
             }
 

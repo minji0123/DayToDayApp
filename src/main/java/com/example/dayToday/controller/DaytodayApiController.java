@@ -44,6 +44,16 @@ public class DaytodayApiController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    // 할 일 수정
+    @PatchMapping("/daytoday/edit/{id}")
+    public ResponseEntity<Daytoday> editDTD (@PathVariable Long id, @RequestBody DaytodayDto daytodayDto) {
+        Daytoday daytodayEntity = daytodayService.edit(id,daytodayDto);
+
+        return (daytodayEntity != null)
+                ? ResponseEntity.status(HttpStatus.OK).body(daytodayEntity)
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     // 할 일 삭제
     @DeleteMapping("/daytoday/delete/{id}")
     public ResponseEntity<Daytoday> deleteDTD (@PathVariable Long id){
