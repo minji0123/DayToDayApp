@@ -1,7 +1,9 @@
-
 html {
   height: 100%;
   display: flex;
+}
+nav{
+margin-top:-20px;
 }
 body {
   width: 100%;

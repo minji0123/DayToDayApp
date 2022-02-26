@@ -15,4 +15,6 @@ public class DaytodayDto {
     public Daytoday toEntity(){
         return new Daytoday(id,title,completed);
     }
+
+
 }

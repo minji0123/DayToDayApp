@@ -29,7 +29,7 @@ function checkbox_Checked(this_checkbox){
     }).then(response => {
             // http 응답 코드에 따른 메세지 출력
             const msg = (response.ok)? "체크박스가 수정되었습니다." : "체크박스 수정 실패!";
-
+            window.location.reload();
      });
 
 }// function
@@ -98,3 +98,51 @@ commentBtn.addEventListener("click", () => {
     });// fetch
 
 }); //addEventListener
+
+
+// 모달 창 변수화 (버튼 누르면 모달창 뜨게)
+const editModal = document.querySelector('#edit-modal');
+
+// 수정 버튼 클릭하면은
+editModal.addEventListener("shown.bs.modal", (event) => {
+    // 트리거 버튼 변수화
+    const triggerBtn = event.relatedTarget;
+
+    // 원래 있던 할 일 불러오기
+    const id = triggerBtn.getAttribute("data-bs-id");
+    const title = triggerBtn.getAttribute("data-bs-title");
+    const completed = triggerBtn.getAttribute("data-bs-completed");
+
+    // 불러온 할 일 반영시키기
+    document.querySelector("#edit-modal-id").value = id;
+    document.querySelector("#edit-modal-title").value = title;
+    document.querySelector("#edit-modal-completed").value = completed;
+});
+
+// 수정 완료 버튼 변수화
+const editedBtn = document.querySelector("#edit-btn");
+
+// 수정 완료 버튼 클릭하면은
+editedBtn.addEventListener("click", () => {
+    // 수정 할일 객체 생성
+    const editDTD = {
+        id : document.querySelector("#edit-modal-id").value,
+        title : document.querySelector("#edit-modal-title").value,
+        completed : document.querySelector("#edit-modal-completed").value
+    };
+
+    // fetch
+    const url = "/daytoday/edit/"+ editDTD.id;
+    fetch (url, {
+        method: "PATCH",
+        body:JSON.stringify(editDTD),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(response => {
+        const msg = (response.ok)? "할 일이 수정되었습니다." : "할 일 수정 실패!";
+
+        // 현재 페이지 새로고침
+        window.location.reload();
+    });
+});

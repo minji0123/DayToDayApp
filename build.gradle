@@ -13,16 +13,35 @@ repositories {
 }
 
 dependencies {
-	// 롬복 추가!
+
+	// lombok
 	implementation 'org.projectlombok:lombok:1.18.20'
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+	// Security
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	// validated
+//	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	// spring data jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// view templete (mustache)
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'
+	// web mvc pattern
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	 runtimeOnly 'com.h2database:h2'
+
+	// h2 database
+	runtimeOnly 'com.h2database:h2'
+
+
+	// starter test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// security test
+	testImplementation 'org.springframework.security:spring-security-test'
+
+
+
 }
 
 tasks.named('test') {

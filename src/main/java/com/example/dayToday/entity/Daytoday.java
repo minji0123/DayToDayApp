@@ -2,11 +2,8 @@ package com.example.dayToday.entity;
 
 
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 
 @Entity
@@ -28,6 +25,8 @@ public class Daytoday {
     @Column(columnDefinition = "boolean default false")
     private Boolean completed;
 
+
+
     public void patch(Daytoday daytoday) {
         if (daytoday.completed != null){
             this.completed = daytoday.completed;
@@ -39,15 +38,5 @@ public class Daytoday {
 
     }
 // patch 는 dto 가 들어왔을 때 dto 에 있는 값을 어떻게 entity 에 반영할지 결정하는 함수이다.
-
-//    @Column
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate regDate;
-//
-//    @Column
-//    @DateTimeFormat(pattern = "HH:mm:ss")
-//    private LocalTime regTime;
-
-
 
 }
