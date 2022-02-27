@@ -28,8 +28,8 @@ function checkbox_Checked(this_checkbox){
         }
     }).then(response => {
             // http 응답 코드에 따른 메세지 출력
-            const msg = (response.ok)? "체크박스가 수정되었습니다." : "체크박스 수정 실패!";
-            window.location.reload();
+//            const msg = (response.ok)? "체크박스가 수정되었습니다." : "체크박스 수정 실패!";
+//            window.location.reload();
      });
 
 }// function
